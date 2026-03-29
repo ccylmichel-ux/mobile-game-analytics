@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: imd_retention
+    description: >
+      D1 and D7 retention by country and install_date. Cohort day and country come from
+      imd_user_cohort (client timestamp → calendar date). Retained at DX if the user has
+      at least one level_started, level_completed, or level_failed on calendar day
+      install_date + X. 
+    columns:
+      - name: country
+        description: "Cohort country from imd_user_cohort."
+      - name: install_date
+        description: "Cohort calendar date (imd_user_cohort.install_date), from client event time."
+        data_tests:
+          - not_null
+      - name: installs
+        description: "Number of users in this cohort slice (one row per user upstream)."
+        data_tests:
+          - not_null
+      - name: day_1_retention
+        description: "Count of users with level activity on install_date + 1 calendar day."
+        data_tests:
+          - not_null
+      - name: day_7_retention
+        description: "Count of users with level activity on install_date + 7 calendar days."
+        data_tests:
+          - not_null

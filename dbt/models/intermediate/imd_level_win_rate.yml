@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: imd_level_win_rate
+    description: >
+      Level win rate among terminal outcomes: level_completions / (completions + failures)
+      for events tied to cohort users. Dimensions: country, install_date (cohort), level_id.
+      Rows with no terminal outcomes for that slice are omitted (WHERE completions + failures > 0).
+    columns:
+      - name: country
+        description: "Cohort country from imd_user_cohort."
+      - name: install_date
+        description: "UTC cohort calendar date."
+        data_tests:
+          - not_null
+      - name: level_id
+        description: "Level id from event JSON payload."
+        data_tests:
+          - not_null
+      - name: level_completions
+        description: "Count of level_completed events."
+        data_tests:
+          - not_null
+      - name: level_failures
+        description: "Count of level_failed events."
+        data_tests:
+          - not_null
+      - name: level_win_rate_pct
+        description: "100 * level_completions / (level_completions + level_failures)."

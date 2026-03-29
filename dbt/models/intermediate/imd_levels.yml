@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: imd_levels
+    description: >
+      Level event fact at a grain suitable for funnel metrics: one row per level event
+      from staging, with calendar event_date, parsed level_id from JSON payload, and
+      event_name distinguishing started / completed / failed.
+    columns:
+      - name: s_user_id
+        description: "User identifier"
+      - name: country
+        description: "Country code where the event was triggered (from s_country_code)."
+      - name: event_date
+        description: >
+          Client event time truncated to UTC calendar date — primary dimension for
+          daily level started / completed / failed counts.
+        data_tests:
+          - not_null
+      - name: event_name
+        description: >
+          level_started, level_completed, or level_failed 
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["level_started", "level_completed", "level_failed"]
+      - name: level_id
+        description: >
+          Numeric level_id from s_event_value JSON when present; NULL when the payload
+          has no level_id (e.g. some failure payloads). Exclude or bucket NULL for per-level breakdowns.

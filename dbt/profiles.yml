@@ -1,0 +1,9 @@
+# Use: cd dbt && dbt run
+# Override path: HOMA_DUCKDB_PATH=/abs/path/to/file.duckdb dbt run
+homa_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('HOMA_DUCKDB_PATH', '../warehouse/homa.duckdb') }}"
+      threads: 4

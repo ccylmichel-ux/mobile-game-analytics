@@ -1,0 +1,8 @@
+dbt-core>=1.8
+dbt-duckdb>=1.8
+duckdb>=1.0
+pandas>=2.0
+streamlit>=1.28
+plotly>=5.18
+sqlfluff>=3.2
+sqlfluff-templater-dbt>=3.2

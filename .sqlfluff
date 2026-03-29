@@ -1,0 +1,7 @@
+[sqlfluff]
+dialect = duckdb
+# Jinja + dbt builtins expands ref/config/var without a live DuckDB file (dbt templater connects).
+templater = jinja
+
+[sqlfluff:templater:jinja]
+apply_dbt_builtins = True

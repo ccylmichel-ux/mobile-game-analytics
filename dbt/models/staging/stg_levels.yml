@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: stg_levels
+    description: >
+      Level progression events from raw Parquet (data/raw/levels). Only level_started,
+      level_completed, and level_failed are kept; rows with null or blank s_user_id are excluded.
+    columns:
+      - name: d_event_received
+        description: "date the event was received (partition key)"
+        data_tests:
+          - not_null
+      - name: i_timestamp
+        description: "unix timestamp of event reception"
+      - name: s_user_id
+        description: "user id (null and blank values excluded at staging)"
+        data_tests:
+          - not_null
+      - name: s_country_code
+        description: "country the event was triggered from"
+      - name: s_event_client_timestamp
+        description: >
+          client-side event time, parsed to TIMESTAMP (naive UTC if the source string has no offset).
+          Unparseable values become NULL (try_cast).
+      - name: s_event_name
+        description: >
+          name of the event — one of level_started (player starts a level),
+          level_completed (successfully completes), level_failed (fails to complete)
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["level_started", "level_completed", "level_failed"]
+      - name: s_event_value
+        description: "payload (may contain level id and other event specific attributes)"
+

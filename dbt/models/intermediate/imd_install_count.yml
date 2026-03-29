@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: imd_install_count
+    description: >
+      Install events rolled up by country and install calendar date. install_count is
+      the number of install rows in the feed for that slice (users may contribute multiple
+      rows per day or over time).
+    columns:
+      - name: country
+        description: "Country code from the install event (s_country_code)."
+      - name: install_date
+        description: >
+          UTC calendar date derived from client install timestamp — dimension for daily
+          install volume by country.
+        data_tests:
+          - not_null
+      - name: install_count
+        description: "Number of install events in this country × install_date group."
+        data_tests:
+          - not_null

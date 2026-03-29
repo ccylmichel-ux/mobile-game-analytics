@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: imd_user_cohort
+    description: >
+      Ephemeral one row per user in the union of install and level streams.
+      Cohort anchor: MIN(s_event_client_timestamp) on installs when the user has
+      install rows; otherwise the same on levels. Country is taken from the row
+      at that instant via ARG_MIN(s_country_code, s_event_client_timestamp).
+      Later duplicate install events do not move the cohort day (README).
+      install_attribution labels whether the anchor came from the install feed
+      or was proxied from first level activity.
+    columns:
+      - name: s_user_id
+        description: "Client user id (non-null, non-blank after trim)."
+        data_tests:
+          - not_null
+          - unique
+      - name: install_attribution
+        description: >
+          install = cohort from first install client timestamp in the extract;
+          first_level = no install rows for this user in the extract, cohort from
+          first level client timestamp.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["install", "first_level"]
+      - name: country
+        description: "Country code on the event row tied to the cohort anchor instant (ARG_MIN); may be NULL if missing on that row."
+      - name: install_date
+        description: "UTC calendar date of the cohort anchor (CAST of MIN client timestamp to DATE)."
+        data_tests:
+          - not_null

@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: mart_user_cohort
+    description: >
+      Analyst-facing cohort dimension: one row per user with cohort country, install_date,
+      and install_attribution. Materializes the logic from imd_user_cohort (ephemeral) as a
+      queryable view in the warehouse.
+  - name: mart_install_count
+    description: >
+      Install event counts by cohort country and install calendar date (client time).
+  - name: mart_level_events
+    description: >
+      Level event fact: started / completed / failed with event_date and level_id.
+  - name: mart_retention
+    description: >
+      D1 and D7 retention aggregates by country and cohort install_date.
+  - name: mart_level_win_rate
+    description: >
+      Win rate (completed vs failed terminal outcomes) by country, cohort install_date, and level_id.
